@@ -43,7 +43,7 @@ public class Dueno {
     @Column(name = "id_dueno")
     private Long id;
 
-    @Pattern(regexp = "\\d{1,2}\\.\\d{3}\\.\\d{3}-[Kk0-9]", message = "El RUT no es válido")
+    @Pattern(regexp = "^[0-9]{7,8}-[0-9Kk]$", message = "El RUT no es válido")
     @NotBlank(message = "El RUT es obligatorio")
     @Column(name = "rut", nullable = false, length = 15, unique = true)
     private String rut;

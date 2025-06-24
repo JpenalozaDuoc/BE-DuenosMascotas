@@ -56,6 +56,19 @@ public class DuenoController {
      */
     @PostMapping
     public ResponseEntity<DuenoDTO> createDueno(@RequestBody DuenoDTO duenoDTO) {
+        String telefonoLimpio = duenoDTO.getTelefono().replaceAll("\\s+", "");
+        duenoDTO.setTelefono(telefonoLimpio);
+        System.out.println("*************************************************");
+        System.out.println("Creando dueño: " + duenoDTO);
+        System.out.println("RUT: " + duenoDTO.getRut());
+        System.out.println("Email: " + duenoDTO.getEmail());
+        System.out.println("Nombre: " + duenoDTO.getNombre());
+        System.out.println("Apellido: " + duenoDTO.getApellido());
+        System.out.println("Dirección: " + duenoDTO.getDireccion());
+        System.out.println("Teléfono Sucio: " + duenoDTO.getTelefono());
+        System.out.println("Teléfono Limpio: " + telefonoLimpio);
+        System.out.println("Estado: " + duenoDTO.getEstado());
+        System.out.println("*************************************************");
         DuenoDTO createdDueno = duenoService.saveDueno(duenoDTO);  // Usar DuenoDTO en la capa de servicio
         return new ResponseEntity<>(createdDueno, HttpStatus.CREATED); // Retorna 201 Created
     }

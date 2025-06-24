@@ -48,8 +48,19 @@ public class MascotaController {
     public ResponseEntity<MascotaDTO> createMascota(@RequestBody MascotaDTO mascotaDTO,
                                                  @RequestParam Long duenoId,
                                                  @RequestParam Long razaId) {
+        System.out.println("********************************************");
+        System.out.println("Id Dueño :"+duenoId);
+        System.out.println("Id Raza :"+razaId);
+        System.out.println("Nombre mascota Json :"+mascotaDTO.getNombre());
+        System.out.println("********************************************");
         MascotaDTO createdMascota = mascotaService.saveMascota(mascotaDTO, duenoId, razaId);  // Cambiado para trabajar con MascotaDTO
+        System.out.println("********************************************");
+        System.out.println("Mascota creada :"+createdMascota.getNombre());
+        System.out.println("Id Mascota :"+createdMascota.getId());
+        System.out.println("Nombre :"+mascotaDTO.getNombre());
+        System.out.println("********************************************");
         return new ResponseEntity<>(createdMascota, HttpStatus.CREATED);
+
     }
 
     @PutMapping("/{id}")
