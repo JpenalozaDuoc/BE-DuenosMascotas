@@ -8,7 +8,7 @@ COPY pom.xml .
 COPY src /app/src
 
 # Copiar el wallet
-COPY src/main/wallet /app/wallet
+COPY src/wallet /app/wallet
 
 # Configurar el wallet para Oracle
 ENV TNS_ADMIN=/app/wallet
@@ -25,7 +25,7 @@ WORKDIR /app
 COPY --from=buildstage /app/target/*.jar /app/app.jar
 
 # Copiar el wallet para Oracle
-COPY src/main/wallet /app/wallet
+COPY src/wallet /app/wallet
 
 ENV TNS_ADMIN=/app/wallet
 
