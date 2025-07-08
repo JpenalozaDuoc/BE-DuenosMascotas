@@ -17,20 +17,6 @@ import jakarta.persistence.Table;
 import microvetcare.microvetcare.dueno.entity.Dueno;
 import microvetcare.microvetcare.raza.entity.Raza;
 
-/*
- * Descripción de la tabla mascota:
-Nombre           ¿Nulo?   Tipo               
----------------- -------- ------------------ 
-ESTADO           NOT NULL NUMBER(1)          
-FECHA_NACIMIENTO          DATE               
-ID_MASCOTA       NOT NULL NUMBER(19)         
-GENERO           NOT NULL VARCHAR2(15 CHAR)  
-CHIP             NOT NULL VARCHAR2(30 CHAR)  
-NOMBRE           NOT NULL VARCHAR2(100 CHAR) 
-ID_DUENO         NOT NULL NUMBER(19)         
-ID_RAZA          NOT NULL NUMBER(19)         
-
- */
 @Entity
 @Table(name = "mascota")
 public class Mascota {
@@ -46,32 +32,27 @@ public class Mascota {
     @Column(name = "fecha_nacimiento", nullable = false)
     private LocalDate fechaNacimiento;
 
-    @Column(name = "estado", nullable = false, length = 1) // 'A' para Activo, 'I' para Inactivo
+    @Column(name = "estado", nullable = false, length = 1) 
     private Integer estado;
 
-    @Column(name = "chip", nullable = false, length = 30) // Asumo que es un identificador único de la mascota
+    @Column(name = "chip", nullable = false, length = 30) 
     private String chip;
 
-    @Column(name = "genero", nullable = false, length = 15) // Genero de la mascota (Macho o Hembra)
+    @Column(name = "genero", nullable = false, length = 15) 
     private String genero;
 
-    // Relación ManyToOne con Dueno (muchas mascotas pertenecen a un dueño)
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_dueno", nullable = false) // Columna FK en la tabla MASCOTA
-    @JsonBackReference  // Evita la recursión infinita y es el "lado de atrás" de la relación.
+    @JoinColumn(name = "id_dueno", nullable = false) 
+    @JsonBackReference 
     private Dueno dueno;
 
-    // Relación ManyToOne con Raza (muchas mascotas pueden ser de la misma raza)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_raza", nullable = false) // <--- ¡IMPORTANTE! Columna FK en la tabla MASCOTA
-    private Raza raza; // <--- ¡IMPORTANTE! Campo para la entidad Raza
+    @JoinColumn(name = "id_raza", nullable = false) 
+    private Raza raza; 
 
-    // Constructor vacío (necesario para JPA)
     public Mascota() {
     }
-
-    // Constructor con campos esenciales (sin ID, será generado)
-    // Incluye 'dueno' y 'raza' para la creación completa
 
     public Mascota(Long id, String nombre, LocalDate fechaNacimiento, Integer estado, String chip, String genero,
             Dueno dueno, Raza raza) {
@@ -85,7 +66,7 @@ public class Mascota {
         this.raza = raza;
     }
 
-    // --- Getters y Setters ---
+
     public Long getId() {
         return id;
     }
@@ -150,7 +131,6 @@ public class Mascota {
         this.raza = raza;
     }
 
-    // --- Métodos equals() y hashCode() ---
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

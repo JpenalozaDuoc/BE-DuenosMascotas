@@ -36,12 +36,10 @@ public class EspecieServiceImpl implements EspecieService{
     @Override
     @Transactional
     public EspecieDTO saveEspecie(EspecieDTO especieDTO) {
-        // Validación de unicidad del nombre de la especie
         if (especieRepository.existsByNombre(especieDTO.getNombre())) {
             throw new IllegalArgumentException("Ya existe una especie con el nombre: " + especieDTO.getNombre());
         }
         
-        // El ID debe ser nulo para una nueva entidad que será generada por la DB
         if (especieDTO.getId() != null) {
             throw new IllegalArgumentException("El ID debe ser nulo para una nueva especie.");
         }
@@ -56,7 +54,6 @@ public class EspecieServiceImpl implements EspecieService{
         Especie existingEspecie = especieRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Especie no encontrada con ID: " + id));
 
-        // Validar unicidad nombreEspecie si cambia
         if (especieDTO.getNombreEspecie() != null && !especieDTO.getNombreEspecie().equals(existingEspecie.getNombreEspecie())) {
             if (especieRepository.existsByNombreEspecie(especieDTO.getNombreEspecie())) {
                 throw new IllegalArgumentException("El nombreEspecie '" + especieDTO.getNombreEspecie() + "' ya está registrado para otra especie.");
@@ -64,7 +61,6 @@ public class EspecieServiceImpl implements EspecieService{
             existingEspecie.setNombreEspecie(especieDTO.getNombreEspecie());
         }
 
-        // Validar unicidad nombre si cambia
         if (especieDTO.getNombre() != null && !especieDTO.getNombre().equals(existingEspecie.getNombre())) {
             if (especieRepository.existsByNombre(especieDTO.getNombre())) {
                 throw new IllegalArgumentException("El nombre '" + especieDTO.getNombre() + "' ya está registrado para otra especie.");
@@ -72,7 +68,6 @@ public class EspecieServiceImpl implements EspecieService{
             existingEspecie.setNombre(especieDTO.getNombre());
         }
 
-        // Actualizar estado si se envía
         if (especieDTO.getEstado() != null) {
             existingEspecie.setEstado(especieDTO.getEstado());
         }
@@ -100,7 +95,6 @@ public class EspecieServiceImpl implements EspecieService{
         return especieRepository.existsByNombre(nombre);
     }
 
-    // Convertir de entidad a DTO
     @Override
     public EspecieDTO convertToDTO(Especie especie) {
         return new EspecieDTO(
@@ -111,7 +105,6 @@ public class EspecieServiceImpl implements EspecieService{
         );
     }
 
-    // Convertir de DTO a entidad
     public Especie convertToEntity(EspecieDTO especieDTO) {
         return new Especie(
             especieDTO.getId(),

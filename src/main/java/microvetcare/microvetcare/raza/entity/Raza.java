@@ -18,19 +18,6 @@ import jakarta.persistence.Table;
 import microvetcare.microvetcare.especie.entity.Especie;
 import microvetcare.microvetcare.mascota.entity.Mascota;
 
-/*
- * Descripción de la tabla raza:
- * Nombre     ¿Nulo?   Tipo               
----------- -------- ------------------ 
-ID_RAZA    NOT NULL NUMBER(19)         
-ESTADO     NOT NULL VARCHAR2(1 CHAR)   
-NOMBRE     NOT NULL VARCHAR2(100 CHAR) 
-ID_ESPECIE NOT NULL NUMBER(19)         
-
- * 
- * 
- */
-
 @Entity
 @Table(name = "raza") 
 public class Raza {
@@ -40,35 +27,29 @@ public class Raza {
     @Column(name = "id_raza")
     private Long id;
 
-    @Column(name = "nombre", nullable = false, length = 100, unique = true) // El nombre de la raza debería ser único
+    @Column(name = "nombre", nullable = false, length = 100, unique = true) 
     private String nombre;
 
-    @Column(name = "estado", nullable = false, length = 1) // 'A' para Activo, 'I' para Inactivo
+    @Column(name = "estado", nullable = false, length = 1) 
     private String estado;
 
-    // Relación ManyToOne con Especie (muchas razas pertenecen a una especie)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_especie", nullable = false)
     @JsonBackReference
     private Especie especie;
 
 
-    // Relación OneToMany con Mascota (una raza puede tener muchas mascotas)
-    // De nuevo, sin CascadeType.ALL ni orphanRemoval para evitar borrados en cascada no deseados.
     @OneToMany(mappedBy = "raza")
-    private Set<Mascota> mascotas; // Esta línea requerirá que Mascota.java exista y tenga el campo 'raza'
+    private Set<Mascota> mascotas;
 
-    // Constructor vacío (necesario para JPA)
     public Raza() {}
 
-    // Constructor con campos (sin ID, será generado)
     public Raza(String nombre, String estado, Especie especie) {
         this.nombre = nombre;
         this.estado = estado;
         this.especie = especie;
     }
 
-    // --- Getters y Setters ---
     public Long getId() {
         return id;
     }
@@ -109,7 +90,6 @@ public class Raza {
         this.mascotas = mascotas;
     }
 
-    // --- Métodos equals() y hashCode() ---
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,7 +103,6 @@ public class Raza {
         return Objects.hash(id);
     }
 
-    // --- toString() ---
     @Override
     public String toString() {
         return "Raza{" +
