@@ -68,11 +68,17 @@ public class RazaController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<RazaDTO> createRaza(@RequestBody RazaDTO razaDTO, @RequestParam(required = false) Long especieId) {
+        System.out.println("********************************************");
+        System.out.println("especieId recibido: " + especieId);
+        System.out.println("********************************************");
         if (especieId == null) {
             throw new IllegalArgumentException("Debe proporcionar especieId en la URL");
         }
 
-        // El servicio ya maneja la conversión, no es necesario crear el objeto Raza manualmente
+        razaDTO.setEspecieId(especieId); // <-- Aquí se asigna el ID de especie al DTO
+        System.out.println("especieId recibido: " + especieId);
+
+        // El servicio ahora recibirá un razaDTO con el especieId ya asignado
         RazaDTO createdRazaDTO = razaService.saveRaza(razaDTO);
 
         return new ResponseEntity<>(createdRazaDTO, HttpStatus.CREATED);

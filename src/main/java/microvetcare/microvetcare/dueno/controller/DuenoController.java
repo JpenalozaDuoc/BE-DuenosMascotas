@@ -57,7 +57,7 @@ public class DuenoController {
      * @param duenoDTO El objeto DuenoDTO a crear
      * @return ResponseEntity con el dueño creado y estado 201 Created
      */
-    @PostMapping
+    @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ADMIN', 'ASISTENTE')") // ADMIN y ASISTENTE pueden crear dueños
     public ResponseEntity<DuenoDTO> createDueno(@RequestBody DuenoDTO duenoDTO) {
         String telefonoLimpio = duenoDTO.getTelefono() != null ? duenoDTO.getTelefono().replaceAll("\\s+", "") : null;

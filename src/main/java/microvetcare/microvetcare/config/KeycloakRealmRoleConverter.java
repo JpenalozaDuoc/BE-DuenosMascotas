@@ -13,7 +13,7 @@ import java.util.stream.Stream; // Importa Stream
 
 public class KeycloakRealmRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
-     @Override
+    @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
         // Inicializa un stream vacío para acumular las autoridades
         Stream<GrantedAuthority> authorities = Stream.empty();

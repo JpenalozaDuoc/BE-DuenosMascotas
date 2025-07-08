@@ -56,8 +56,8 @@ public class MascotaController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ADMIN', 'ASISTENTE')") // ADMIN y ASISTENTE pueden crear mascotas
     public ResponseEntity<MascotaDTO> createMascota(@RequestBody MascotaDTO mascotaDTO,
-                                                 @RequestParam Long duenoId,
-                                                 @RequestParam Long razaId) {
+                                                 @RequestParam(required = false) Long duenoId,
+                                                 @RequestParam(required = false) Long razaId) {
         System.out.println("********************************************");
         System.out.println("Id Dueño :"+duenoId);
         System.out.println("Id Raza :"+razaId);
