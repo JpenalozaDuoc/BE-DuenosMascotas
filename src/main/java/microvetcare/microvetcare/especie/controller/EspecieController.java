@@ -31,12 +31,8 @@ public class EspecieController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'VETERINARIO', 'ASISTENTE')")
     public ResponseEntity<List<EspecieDTO>> getAllEspecies(
-        @RequestHeader(value = "Authorization", required = false) String authorizationHeader // <-- ¡Añade este parámetro!
+        @RequestHeader(value = "Authorization", required = false) String authorizationHeader
     ) {
-        System.out.println("********************************************");
-        System.out.println("DEBUG: Solicitud GET /api/especies");
-        System.out.println("DEBUG: Encabezado Authorization: " + (authorizationHeader != null ? authorizationHeader.substring(0, Math.min(authorizationHeader.length(), 30)) + "..." : "No presente o vacío"));
-        System.out.println("********************************************");
         List<EspecieDTO> especies = especieService.findAllEspecies();
         return ResponseEntity.ok(especies);
     }

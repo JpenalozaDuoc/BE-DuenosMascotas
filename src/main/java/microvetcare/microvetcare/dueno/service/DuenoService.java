@@ -6,13 +6,11 @@ import microvetcare.microvetcare.dueno.DTO.DuenoDTO;
 
 public interface DuenoService {
 
-    List<DuenoDTO> findAllDuenos(); // Retorna List<Dueno>
-    Optional<DuenoDTO> findDuenoById(Long id); // Retorna Optional<Dueno>, id es Long
-    DuenoDTO saveDueno(DuenoDTO dueno); // Recibe Dueno
-    DuenoDTO updateDueno(Long id, DuenoDTO dueno); // Recibe Dueno, id es Long
-    void deleteDueno(Long id); // id es Long
-
-    // Métodos para búsqueda por campos únicos, retornan Optional<Dueno>
+    List<DuenoDTO> findAllDuenos();
+    Optional<DuenoDTO> findDuenoById(Long id);
+    DuenoDTO saveDueno(DuenoDTO dueno); 
+    DuenoDTO updateDueno(Long id, DuenoDTO dueno); 
+    void deleteDueno(Long id);
     Optional<DuenoDTO> findDuenoByRut(String rut);
     Optional<DuenoDTO> findDuenoByEmail(String email);
 }

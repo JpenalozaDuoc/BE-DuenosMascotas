@@ -15,16 +15,6 @@ import jakarta.persistence.Table;
 import microvetcare.microvetcare.raza.entity.Raza;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-/*
-Descripción de la tabla especie:
- * Nombre         ¿Nulo?   Tipo               
--------------- -------- ------------------ 
-ESTADO         NOT NULL NUMBER(1)          
-ID_ESPECIE     NOT NULL NUMBER(19)         
-NOMBRE_ESPECIE NOT NULL VARCHAR2(100 CHAR) 
-NOMBRE         NOT NULL VARCHAR2(100 CHAR) 
-
-*/
 @Entity
 @Table(name = "especie")
 public class Especie {
@@ -48,8 +38,6 @@ public class Especie {
     @JsonManagedReference
     private List<Raza> razas = new ArrayList<>();
 
-
-    // Constructor vacío (necesario para JPA)
     public Especie() {}
 
     public Especie(Long id, String nombreEspecie, String nombre, Integer estado) {
@@ -58,7 +46,7 @@ public class Especie {
         this.nombre = nombre;
         this.estado = estado;
     }
-    // --- Getters y Setters ---
+
     public Long getId() {
         return id;
     }

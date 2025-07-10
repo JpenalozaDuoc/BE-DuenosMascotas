@@ -15,7 +15,6 @@ public class EspecieDTO {
         this.estado = estado;
     }
 
-    // Constructor vacío (necesario para JPA)
     public EspecieDTO() {}
 
     public Long getId() {

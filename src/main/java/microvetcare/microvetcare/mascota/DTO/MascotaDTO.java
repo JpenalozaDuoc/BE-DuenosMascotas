@@ -10,13 +10,12 @@ public class MascotaDTO {
     private String genero;
     private Integer estado;
     private LocalDate fechaNacimiento;
-    private Long idDueno;  // Solo el ID del Dueno
-    private Long idRaza;   // Asumiendo que Raza también es otra entidad con un ID
+    private Long idDueno;  
+    private Long idRaza;  
 
-    // Constructor vacío
+
     public MascotaDTO() {}
 
-    // Constructor con campos necesarios
     public MascotaDTO(Long id, String nombre, String chip, String genero, Integer estado, LocalDate fechaNacimiento, Long idDueno, Long idRaza) {
         this.id = id;
         this.nombre = nombre;
@@ -28,7 +27,6 @@ public class MascotaDTO {
         this.idRaza = idRaza;
     }
 
-    // Getters y setters
     public Long getId() {
         return id;
     }

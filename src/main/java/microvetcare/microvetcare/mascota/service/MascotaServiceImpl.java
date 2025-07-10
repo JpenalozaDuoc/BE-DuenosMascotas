@@ -29,14 +29,8 @@ public class MascotaServiceImpl implements MascotaService {
         this.razaRepository = razaRepository;
     }
 
-    // -------------------- Métodos de Conversión --------------------
-
-    // Convertir MascotaDTO a Mascota (Entidad) para CREAR o ACTUALIZAR
-    // Este es el método correcto y único para convertir de DTO a Entidad
     private Mascota convertirDTOaEntidad(MascotaDTO mascotaDTO, Long duenoId, Long razaId) {
         Mascota mascota = new Mascota();
-        // Solo asigna el ID si es una ACTUALIZACIÓN (si el DTO trae un ID no nulo)
-        // Para una CREACIÓN, el ID será nulo y JPA lo generará.
         if (mascotaDTO.getId() != null) {
             mascota.setId(mascotaDTO.getId());
         }
@@ -45,10 +39,8 @@ public class MascotaServiceImpl implements MascotaService {
         mascota.setFechaNacimiento(mascotaDTO.getFechaNacimiento());
         mascota.setChip(mascotaDTO.getChip());
         mascota.setGenero(mascotaDTO.getGenero());
-        // Asumiendo que MascotaDTO.getEstado() es compatible con Mascota.setEstado() (Boolean)
         mascota.setEstado(mascotaDTO.getEstado());
 
-        // CORRECCIÓN CLAVE: Usar duenoId y razaId pasados como parámetros para buscar las entidades
         Dueno dueno = duenoRepository.findById(duenoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Dueño no encontrado con ID: " + duenoId));
         mascota.setDueno(dueno);
@@ -60,7 +52,6 @@ public class MascotaServiceImpl implements MascotaService {
         return mascota;
     }
 
-    // Convertir Mascota (Entidad) a MascotaDTO
     private MascotaDTO convertirEntidadADTO(Mascota mascota) {
         MascotaDTO mascotaDTO = new MascotaDTO();
         mascotaDTO.setId(mascota.getId());
@@ -68,23 +59,18 @@ public class MascotaServiceImpl implements MascotaService {
         mascotaDTO.setFechaNacimiento(mascota.getFechaNacimiento());
         mascotaDTO.setChip(mascota.getChip());
         mascotaDTO.setGenero(mascota.getGenero());
-        mascotaDTO.setEstado(mascota.getEstado()); // Asumiendo que Mascota.getEstado() es compatible con MascotaDTO.setEstado()
+        mascotaDTO.setEstado(mascota.getEstado());
 
-        // Asignar solo el id del Dueno en lugar de la entidad completa
         if (mascota.getDueno() != null) {
             mascotaDTO.setIdDueno(mascota.getDueno().getId());
         }
 
-        // Asignar solo el id de la Raza en lugar de la entidad completa
         if (mascota.getRaza() != null) {
             mascotaDTO.setIdRaza(mascota.getRaza().getId());
         }
 
         return mascotaDTO;
     }
-
-
-    // -------------------- Métodos del Service --------------------
 
     @Override
     @Transactional(readOnly = true)
@@ -104,31 +90,22 @@ public class MascotaServiceImpl implements MascotaService {
     @Override
     @Transactional
     public MascotaDTO saveMascota(MascotaDTO mascotaDTO, Long duenoId, Long razaId) {
-        // Usa el método de conversión con los IDs
         Mascota mascota = convertirDTOaEntidad(mascotaDTO, duenoId, razaId);
-
         mascota = mascotaRepository.save(mascota);
-
         return convertirEntidadADTO(mascota);
     }
 
     @Override
     @Transactional
     public MascotaDTO updateMascota(Long id, MascotaDTO mascotaDTO, Long duenoId, Long razaId) {
-        // Verificar si la mascota existe
         Mascota existingMascota = mascotaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Mascota no encontrada con ID: " + id));
-
-        // Actualizar la entidad existente con los datos del DTO y las relaciones
-        // Podrías reutilizar convertirDTOaEntidad aquí o actualizar manualmente
-        // Vamos a actualizar manualmente para mayor claridad y control sobre la entidad existente
         existingMascota.setNombre(mascotaDTO.getNombre());
         existingMascota.setFechaNacimiento(mascotaDTO.getFechaNacimiento());
         existingMascota.setChip(mascotaDTO.getChip());
         existingMascota.setGenero(mascotaDTO.getGenero());
         existingMascota.setEstado(mascotaDTO.getEstado());
 
-        // Actualizar Dueno y Raza (se buscan con los IDs proporcionados)
         Dueno dueno = duenoRepository.findById(duenoId)
                 .orElseThrow(() -> new ResourceNotFoundException("Dueño no encontrado con ID: " + duenoId));
         existingMascota.setDueno(dueno);
@@ -137,10 +114,8 @@ public class MascotaServiceImpl implements MascotaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Raza no encontrada con ID: " + razaId));
         existingMascota.setRaza(raza);
 
-        // Guardar la mascota actualizada
         existingMascota = mascotaRepository.save(existingMascota);
 
-        // Convertir la entidad actualizada a DTO
         return convertirEntidadADTO(existingMascota);
     }
 

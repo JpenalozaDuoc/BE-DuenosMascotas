@@ -9,16 +9,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream; // Importa Stream
+import java.util.stream.Stream;
 
 public class KeycloakRealmRoleConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
 
-     @Override
+    @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
-        // Inicializa un stream vacío para acumular las autoridades
         Stream<GrantedAuthority> authorities = Stream.empty();
 
-        // 1. Intentar extraer roles del 'realm_access' (roles de realm)
         Object realmAccessObj = jwt.getClaims().get("realm_access");
         Map<String, Object> realmAccess = null;
         if (realmAccessObj instanceof Map<?, ?>) {
@@ -40,9 +38,6 @@ public class KeycloakRealmRoleConverter implements Converter<Jwt, Collection<Gra
             }
         }
 
-        // 2. Intentar extraer roles de 'resource_access' (roles de cliente)
-        // Reemplaza 'vetcare-app-service' con el ID real de tu cliente en Keycloak
-        // O con 'vetcare-app' si ese es el Client ID configurado para el microservicio
         Object resourceAccessObj = jwt.getClaims().get("resource_access");
         Map<String, Object> resourceAccess = null;
         if (resourceAccessObj instanceof Map<?, ?>) {
@@ -51,7 +46,7 @@ public class KeycloakRealmRoleConverter implements Converter<Jwt, Collection<Gra
             resourceAccess = casted;
         }
         if (resourceAccess != null) {
-            Object clientAccessObj = resourceAccess.get("vetcare-app"); // <-- ¡Revisa este Client ID!
+            Object clientAccessObj = resourceAccess.get("vetcare-app");
             Map<String, Object> clientAccess = null;
             if (clientAccessObj instanceof Map<?, ?>) {
                 @SuppressWarnings("unchecked")
@@ -73,8 +68,6 @@ public class KeycloakRealmRoleConverter implements Converter<Jwt, Collection<Gra
             }
         }
         
-        // Puedes añadir más fuentes de roles si tu Keycloak los organiza de otra manera.
-
         return authorities.collect(Collectors.toList());
     }
 

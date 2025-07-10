@@ -15,17 +15,14 @@ public class DuenoServiceImpl implements DuenoService {
 
     private final DuenoRepository duenoRepository;
 
-    // Constructor para inyección de dependencias
     public DuenoServiceImpl(DuenoRepository duenoRepository) {
         this.duenoRepository = duenoRepository;
     }
 
-    // Convertir de Dueno a DuenoDTO
     private DuenoDTO convertirADTO(Dueno dueno) {
-        return new DuenoDTO(dueno);  // Suponiendo que tienes un constructor en DuenoDTO que recibe un Dueno
+        return new DuenoDTO(dueno); 
     }
 
-    // Convertir de DuenoDTO a Dueno (si es necesario para persistir)
     private Dueno convertirAEntidad(DuenoDTO duenoDTO) {
         Dueno dueno = new Dueno();
         dueno.setId(duenoDTO.getId());
@@ -42,7 +39,6 @@ public class DuenoServiceImpl implements DuenoService {
     @Override
     @Transactional(readOnly = true)
     public List<DuenoDTO> findAllDuenos() {
-        // Convertir a DTO para cada dueño
         List<Dueno> duenos = duenoRepository.findAll();
         return duenos.stream().map(this::convertirADTO).toList();
     }
@@ -50,13 +46,12 @@ public class DuenoServiceImpl implements DuenoService {
     @Override
     @Transactional(readOnly = true)
     public Optional<DuenoDTO> findDuenoById(Long id) {
-        return duenoRepository.findById(id).map(this::convertirADTO);  // Convertir a DTO
+        return duenoRepository.findById(id).map(this::convertirADTO);
     }
 
     @Override
     @Transactional
     public DuenoDTO saveDueno(DuenoDTO duenoDTO) {
-        // Validar si ya existe un dueño con el mismo rut o email
         if (duenoRepository.existsByRut(duenoDTO.getRut())) {
             throw new IllegalArgumentException("Ya existe un dueño con el RUT: " + duenoDTO.getRut());
         }
@@ -68,22 +63,17 @@ public class DuenoServiceImpl implements DuenoService {
             throw new IllegalArgumentException("El ID debe ser nulo para un nuevo dueño.");
         }
 
-        // Convertir DuenoDTO a Dueno para persistir
         Dueno dueno = convertirAEntidad(duenoDTO);
         Dueno savedDueno = duenoRepository.save(dueno);
 
-        // Devolver el DTO de la entidad guardada
         return convertirADTO(savedDueno);
     }
 
     @Override
     @Transactional
     public DuenoDTO updateDueno(Long id, DuenoDTO duenoDTO) {
-        // Buscar el dueño existente
         Dueno duenoExistente = duenoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Dueño no encontrado con ID: " + id));
-
-        // Validar cambios en RUT y Email, si son distintos
         if (duenoDTO.getRut() != null && !duenoDTO.getRut().equals(duenoExistente.getRut())) {
             if (duenoRepository.findByRut(duenoDTO.getRut()).isPresent()) {
                 throw new IllegalArgumentException("El RUT " + duenoDTO.getRut() + " ya está registrado para otro dueño.");
@@ -98,14 +88,12 @@ public class DuenoServiceImpl implements DuenoService {
             duenoExistente.setEmail(duenoDTO.getEmail());
         }
 
-        // Actualizar los demás campos
         duenoExistente.setNombre(duenoDTO.getNombre() != null ? duenoDTO.getNombre() : duenoExistente.getNombre());
         duenoExistente.setApellido(duenoDTO.getApellido() != null ? duenoDTO.getApellido() : duenoExistente.getApellido());
         duenoExistente.setDireccion(duenoDTO.getDireccion() != null ? duenoDTO.getDireccion() : duenoExistente.getDireccion());
         duenoExistente.setTelefono(duenoDTO.getTelefono() != null ? duenoDTO.getTelefono() : duenoExistente.getTelefono());
         duenoExistente.setEstado(duenoDTO.getEstado() != null ? duenoDTO.getEstado() : duenoExistente.getEstado());
 
-        // Guardar los cambios y devolver el DTO actualizado
         Dueno updatedDueno = duenoRepository.save(duenoExistente);
         return convertirADTO(updatedDueno);
     }
@@ -122,12 +110,12 @@ public class DuenoServiceImpl implements DuenoService {
     @Override
     @Transactional(readOnly = true)
     public Optional<DuenoDTO> findDuenoByRut(String rut) {
-        return duenoRepository.findByRut(rut).map(this::convertirADTO);  // Convertir a DTO
+        return duenoRepository.findByRut(rut).map(this::convertirADTO);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<DuenoDTO> findDuenoByEmail(String email) {
-        return duenoRepository.findByEmail(email).map(this::convertirADTO);  // Convertir a DTO
+        return duenoRepository.findByEmail(email).map(this::convertirADTO);
     }
 }

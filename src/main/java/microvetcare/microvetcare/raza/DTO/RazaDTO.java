@@ -7,9 +7,8 @@ public class RazaDTO {
     private Long id;
     private String nombre;
     private String estado;
-    private Long especieId;  // Aquí agregas el campo especieId
-
-    // Constructor completo
+    private Long especieId;
+    
     public RazaDTO(Long id, String nombre, String estado, Long especieId) {
         this.id = id;
         this.nombre = nombre;
@@ -17,18 +16,15 @@ public class RazaDTO {
         this.especieId = especieId;
     }
 
-    // Constructor que recibe una entidad Raza y mapea sus campos al DTO
     public RazaDTO(Raza raza) {
         this.id = raza.getId();
         this.nombre = raza.getNombre();
         this.estado = raza.getEstado();
-        this.especieId = raza.getEspecie().getId();  // Suponiendo que la especie es una entidad con ID
+        this.especieId = raza.getEspecie().getId();
     }
 
-    // Constructor vacío (necesario para JPA)
     public RazaDTO() {}
 
-    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -61,15 +57,11 @@ public class RazaDTO {
         this.especieId = especieId;
     }
 
-    // Método para convertir el DTO de vuelta a la entidad Raza
     public Raza toEntity() {
         Raza raza = new Raza();
         raza.setId(this.id);
         raza.setNombre(this.nombre);
         raza.setEstado(this.estado);
-        // En este punto, debes buscar la especie por su ID antes de asignarla
-        // Esto puede ser una llamada a un servicio o un repositorio para obtener la entidad Especie
-        // Por ahora se asume que el ID de la especie es suficiente para representarla
         return raza;
     }
 

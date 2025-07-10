@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
-import org.springframework.web.bind.annotation.RequestHeader; // ¡Importa esto!
+import org.springframework.web.bind.annotation.RequestHeader;
 import microvetcare.microvetcare.exception.ResourceNotFoundException;
 import microvetcare.microvetcare.raza.DTO.RazaDTO;
 import microvetcare.microvetcare.raza.service.RazaService;
@@ -31,12 +31,8 @@ public class RazaController {
    @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'VETERINARIO', 'ASISTENTE')")
     public ResponseEntity<List<RazaDTO>> getAllRazas(
-        @RequestHeader(value = "Authorization", required = false) String authorizationHeader // <-- ¡Añade este parámetro!
+        @RequestHeader(value = "Authorization", required = false) String authorizationHeader 
     ) {
-        System.out.println("********************************************");
-        System.out.println("DEBUG: Solicitud GET /api/razas");
-        System.out.println("DEBUG: Encabezado Authorization: " + (authorizationHeader != null ? authorizationHeader.substring(0, Math.min(authorizationHeader.length(), 30)) + "..." : "No presente o vacío"));
-        System.out.println("********************************************");
         List<RazaDTO> razaDTOs = razaService.findAllRazas();
         return ResponseEntity.ok(razaDTOs);
     }
@@ -71,8 +67,7 @@ public class RazaController {
         if (especieId == null) {
             throw new IllegalArgumentException("Debe proporcionar especieId en la URL");
         }
-
-        // El servicio ya maneja la conversión, no es necesario crear el objeto Raza manualmente
+        razaDTO.setEspecieId(especieId);
         RazaDTO createdRazaDTO = razaService.saveRaza(razaDTO);
 
         return new ResponseEntity<>(createdRazaDTO, HttpStatus.CREATED);

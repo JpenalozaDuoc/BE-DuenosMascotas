@@ -19,21 +19,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import microvetcare.microvetcare.mascota.entity.Mascota;
 
-/*
- * 
- * Descripción de la tabla dueno:
- * Nombre    ¿Nulo?   Tipo               
---------- -------- ------------------ 
-ESTADO    NOT NULL NUMBER(1)          
-ID_DUENO  NOT NULL NUMBER(19)         
-RUT       NOT NULL VARCHAR2(15 CHAR)  
-TELEFONO           VARCHAR2(11 CHAR)  
-APELLIDO  NOT NULL VARCHAR2(50 CHAR)  
-NOMBRE    NOT NULL VARCHAR2(50 CHAR)  
-EMAIL              VARCHAR2(250 CHAR) 
-DIRECCION NOT NULL VARCHAR2(200 CHAR) 
 
- */
 @Entity
 @Table(name = "dueno")
 public class Dueno {
@@ -58,7 +44,7 @@ public class Dueno {
     private String direccion;
 
     @Pattern(regexp = "\\d{11}", message = "El teléfono debe contener exactamente 11 dígitos")
-    @Column(name = "telefono", length = 11) // Nullable por defecto
+    @Column(name = "telefono", length = 11) 
     private String telefono;
 
     @Email(message = "El formato del correo electrónico no es válido")
@@ -69,13 +55,11 @@ public class Dueno {
     private Boolean estado;
 
     @OneToMany(mappedBy = "dueno", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference  // Referencia gestionada, evita la recursión infinita.
-    private Set<Mascota> mascotas; // Usar Set para evitar duplicados y mejor rendimiento
+    @JsonManagedReference  
+    private Set<Mascota> mascotas; 
 
-    // Constructor vacío (necesario para JPA)
     public Dueno() {}
 
-    // Constructor con campos (útil para crear nuevas instancias sin ID)
     public Dueno(String rut, String nombre, String apellido, String direccion,
                  String telefono, String email, Boolean estado) {
         this.rut = rut;
@@ -86,7 +70,6 @@ public class Dueno {
         this.email = email;
         this.estado = estado;
     }
-    // --- Getters y Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -114,9 +97,6 @@ public class Dueno {
     public Set<Mascota> getMascotas() { return mascotas; }
     public void setMascotas(Set<Mascota> mascotas) { this.mascotas = mascotas; }
 
-    // --- Métodos equals() y hashCode() ---
-    // Son cruciales para comparar objetos y usarlos en colecciones (Sets, Maps)
-    // Basados en el ID, que es único.
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -130,9 +110,6 @@ public class Dueno {
         return Objects.hash(id);
     }
 
-    // --- toString() para depuración ---
-    // Evita incluir colecciones o relaciones completas para prevenir StackOverflowError
-    // y para evitar cargar datos innecesarios en la depuración.
     @Override
     public String toString() {
         return "Dueno{" +
