@@ -65,6 +65,7 @@ public class Mascota {
         this.raza = raza;
     }
 
+    
     public Long getId() {
         return id;
     }

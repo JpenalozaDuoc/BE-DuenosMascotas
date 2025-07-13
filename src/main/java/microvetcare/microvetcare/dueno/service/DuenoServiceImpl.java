@@ -52,6 +52,28 @@ public class DuenoServiceImpl implements DuenoService {
     @Override
     @Transactional
     public DuenoDTO saveDueno(DuenoDTO duenoDTO) {
+        // --- CAMBIO AQUÍ: Validar ID nulo primero ---
+        if (duenoDTO.getId() != null) {
+            throw new IllegalArgumentException("El ID debe ser nulo para un nuevo dueño.");
+        }
+
+        if (duenoRepository.existsByRut(duenoDTO.getRut())) {
+            throw new IllegalArgumentException("Ya existe un dueño con el RUT: " + duenoDTO.getRut());
+        }
+        if (duenoDTO.getEmail() != null && duenoRepository.existsByEmail(duenoDTO.getEmail())) {
+            throw new IllegalArgumentException("Ya existe un dueño con el Email: " + duenoDTO.getEmail());
+        }
+
+        Dueno dueno = convertirAEntidad(duenoDTO);
+        Dueno savedDueno = duenoRepository.save(dueno);
+
+        return convertirADTO(savedDueno);
+    }
+    
+    /*
+    @Override
+    @Transactional
+    public DuenoDTO saveDueno(DuenoDTO duenoDTO) {
         if (duenoRepository.existsByRut(duenoDTO.getRut())) {
             throw new IllegalArgumentException("Ya existe un dueño con el RUT: " + duenoDTO.getRut());
         }
@@ -68,6 +90,7 @@ public class DuenoServiceImpl implements DuenoService {
 
         return convertirADTO(savedDueno);
     }
+    */
 
     @Override
     @Transactional

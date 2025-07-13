@@ -48,6 +48,12 @@ public class Raza {
         this.estado = estado;
         this.especie = especie;
     }
+    
+    // --- ¡AÑADE ESTE CONSTRUCTOR! ---
+    public Raza(Long id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
 
     public Long getId() {
         return id;
