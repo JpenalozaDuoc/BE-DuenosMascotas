@@ -38,6 +38,21 @@ public class DuenoDTO {
         }
     }
 
+    // --- NUEVO CONSTRUCTOR AÑADIDO ---
+    public DuenoDTO(Long id, String rut, String nombre, String apellido, String direccion, 
+                    String telefono, String email, Boolean estado) {
+        this.id = id;
+        this.rut = rut;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.email = email;
+        this.estado = estado;
+        // La lista de mascotas no se inicializa aquí, ya que se llena al convertir de entidad
+        this.mascotaIds = List.of(); // O null, dependiendo de si quieres que sea mutable o no
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getRut() { return rut; }
